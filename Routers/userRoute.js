@@ -1,8 +1,5 @@
 const userRoute = require("express").Router()
 const auth = require('../Middleware/auth')
-const multer = require("multer");
-const path = require("path");
-const fs = require("fs");
 const {
     getAllCategory,
     getCategoryWiseSubCategory,
@@ -16,7 +13,9 @@ const {
     userLogin,
     changePassword,
     forgetPassword,
-    resetPassword
+    resetPassword,
+    getUserDaitles,
+    insertUserData
 } = require("../Controllers/userControllers");
 const { placeOrder, getUserOrder, getUserOrderDaitle } = require("../Controllers/orderControllers");
 
@@ -28,7 +27,11 @@ userRoute.post('/change-password', auth.verifyToken, changePassword)
 
 userRoute.post('/forgot-password', forgetPassword)
 
-userRoute.post('/reset-password', resetPassword)
+userRoute.post('/reset-password', resetPassword);
+
+userRoute.post('/get-daitles',auth.verifyToken,getUserDaitles)
+
+userRoute.post('/update-userdata',auth.verifyToken,insertUserData)
 
 userRoute.get('/category', getAllCategory)
 

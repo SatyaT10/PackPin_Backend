@@ -1,9 +1,9 @@
 const mongoose = require('mongoose');
 
 const orderSchema = new mongoose.Schema({
-    order_id:{
-        type:Number,
-        required:true
+    order_id: {
+        type: Number,
+        required: true
     },
     customerId: {
         type: mongoose.Schema.Types.ObjectId,
@@ -26,7 +26,7 @@ const orderSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    products:[{
+    products: [{
         productId: {
             type: mongoose.Schema.Types.ObjectId,
             ref: 'Product',
@@ -36,11 +36,15 @@ const orderSchema = new mongoose.Schema({
             type: String,
             required: true
         },
-        quantity: {
+        packOf: {
             type: Number,
             required: true
         },
         price: {
+            type: Number,
+            required: true
+        },
+        quantity: {
             type: Number,
             required: true
         }
@@ -61,8 +65,8 @@ const orderSchema = new mongoose.Schema({
         type: Date,
         default: Date.now
     },
-    spicleRemark:{
-        type:String
+    spicleRemark: {
+        type: String
     }
 });
 

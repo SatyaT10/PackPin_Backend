@@ -65,7 +65,7 @@ const placeOrder = async (req, res, next) => {
                     products: productsJson,
                     status: "placed",
                     totalAmount: totalAmount,
-                    spicleRemark: req.body.spicleRemark
+                    spicleRemark: req.body.spicleRemark || ''
                 })
             }
             await orderData.save();
@@ -84,7 +84,7 @@ const placeOrder = async (req, res, next) => {
 
 const getUserOrder = async (req, res, next) => {
     try {
-        const userId = req.user.id;
+        const userId = req.user.userId;
         if (userId) {
             const orderData = await Order.find({ customerId: userId }).populate('orderDate').sort({
                 orderDate: -1

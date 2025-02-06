@@ -180,8 +180,8 @@ const updateCategory = async (req, res, next) => {
                     } else {
                         catImg = categoryData.categoryImage;
                     }
-                    categoryData.categoryName = req.body.categoryName
-                    categoryData.categoryDescription = req.body.categoryDescription
+                    categoryData.categoryName = req.body.categoryName || categoryData.categoryName;
+                    categoryData.categoryDescription = req.body.description || categoryData.categoryDescription;
                     categoryData.categoryImage = catImg
                     await categoryData.save();
                     res.status(200).json({
@@ -284,7 +284,7 @@ const getAllSubCategory = async (req, res, next) => {
                     success: true,
                     data: subCategoryData,
                     message: "Retriving all subCategory......",
-                    count:subCategoryData.length
+                    count: subCategoryData.length
                 })
             } else {
                 throw new CustomError("Sub Category not found", 404);
@@ -386,7 +386,7 @@ const getSubCategoryDaitles = async (req, res, next) => {
         const isAdmin = req.user.isAdmin;
         const subCategoryId = req.body.subCategoryId;
         console.log(subCategoryId);
-        
+
         if (isAdmin) {
             if (subCategoryId) {
                 const subCategoryData = await SubCategory.findOne({
@@ -572,7 +572,7 @@ const deleteProduct = async (req, res, next) => {
     }
 }
 
-const getAllProduct = async (req, res,next) => {
+const getAllProduct = async (req, res, next) => {
     try {
         const allProduct = await Product.find();
         if (!allProduct || allProduct.length === 0) {
@@ -580,9 +580,9 @@ const getAllProduct = async (req, res,next) => {
         }
         res.status(200).json({
             success: true,
+            message: "All products retrieved successfully",
             data: allProduct,
             count: allProduct.length,
-            message: "All products retrieved successfully"
         })
     } catch (error) {
         console.error("Error retrieving products:", error.message);
@@ -590,7 +590,7 @@ const getAllProduct = async (req, res,next) => {
     }
 };
 
-const getSingleProduct = async (req, res,next) => {
+const getSingleProduct = async (req, res, next) => {
     try {
         const ProductId = req.body.productId
         const ProductData = await Product.findOne({

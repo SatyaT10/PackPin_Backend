@@ -86,16 +86,12 @@ const userRegister = async (req, res, next) => {
             if (existingUser) {
                 throw new CustomError('User already exists', 400);
             } else {
-                const hashedPassword = await bcrypt.hash(password, 10);
-
-
-
+                const hashedPassword = await bcrypt.hash(password, 10)
                 const user = new User({
                     name,
                     email,
                     password: hashedPassword,
                     whatsAppNo: phone,
-
                 });
                 await user.save();
             }
@@ -131,7 +127,7 @@ const userLogin = async (req, res, next) => {
                         userId: user._id,
                         name: user.name,
                         email: user.email,
-                        phone: user.WhatsAppNo,
+                        phone: user.whatsAppNo,
                     }
                     const token = jwt.sign(userData, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIREIN });
                     res.status(200).json({
@@ -307,7 +303,7 @@ const getAllUsers = async (req, res, next) => {
 const getUserDaitles = async (req, res, next) => {
     try {
         const isAdmin = req.user.isAdmin;
-        const userId = req.user.id;
+        const userId = req.user.userId;
         const user_id = req.body.userId;
         const fUserId = userId || user_id
         if (isAdmin || userId) {
@@ -335,7 +331,7 @@ const getUserDaitles = async (req, res, next) => {
 const insertUserData = async (req, res, next) => {
     try {
         const isAdmin = req.user.isAdmin;
-        const userId = req.user.id;
+        const userId = req.user.userId;
         const user_id = req.body.userId;
         const fUserId = userId || user_id
         const userDaitle = await User.findOne({
@@ -357,12 +353,14 @@ const insertUserData = async (req, res, next) => {
                 if (!address || !pinCode || !city || !state || !country || !businessName) {
                     throw new CustomError("Please fill all the requried fields", 400);
                 } else {
-
                     const lastUser = await User.findOne({}, {}, { sort: { user_id: -1 } });
+                    
                     const newUserId = lastUser ? Number(lastUser.user_id) + 1 : 1;
-
+                    console.log(newUserId);
+                    
                     const formattedUserId = newUserId < 10000 ? String(newUserId).padStart(4, '0') : String(newUserId);
-
+                    console.log(formattedUserId);
+                    
                     userDaitle.businessName = businessName;
                     userDaitle.state = state;
                     userDaitle.city = city;
