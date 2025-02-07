@@ -15,7 +15,8 @@ const {
     forgetPassword,
     resetPassword,
     getUserDaitles,
-    insertUserData
+    insertUserData,
+    updateUserProfile
 } = require("../Controllers/userControllers");
 const { placeOrder, getUserOrder, getUserOrderDaitle } = require("../Controllers/orderControllers");
 
@@ -30,6 +31,8 @@ userRoute.post('/forgot-password', forgetPassword)
 userRoute.post('/reset-password', resetPassword);
 
 userRoute.post('/get-daitles',auth.verifyToken,getUserDaitles)
+
+userRoute.post('/profile-update',auth.verifyToken,updateUserProfile)
 
 userRoute.post('/update-userdata',auth.verifyToken,insertUserData)
 

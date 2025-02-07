@@ -18,7 +18,6 @@ const Admin = require('./Routers/adminRoute');
 const User = require('./Routers/userRoute');
 
 
-
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -28,14 +27,6 @@ app.use(morgan('dev'));
 app.use('/admin', Admin)
 
 app.use('/users', User)
-
-
-
-
-
-
-
-
 
 app.all('*', (req, res) => {
     throw new CustomError(`Can't find ${req.originalUrl} on this server!`, 404);

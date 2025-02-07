@@ -35,7 +35,6 @@ function verifyOtp(email, inputOtp) {
     }
 }
 
-
 const sendResetPasswordMail = async (name, email, otp) => {
     try {
         console.log("hOst->", process.env.SMTP_HOST, "-", "USER->", process.env.SMTP_USER, "--", "Password->", process.env.SMTP_PASSWORD);
@@ -148,10 +147,9 @@ const userLogin = async (req, res, next) => {
 const updateUserProfile = async (req, res, next) => {
     try {
         const isAdmin = req.user.isAdmin;
-        const userId = req.user.id;
+        const userId = req.user.userId;
         const user_id = req.body.userId;
         const fUserId = userId || user_id
-        const { name, phone } = req.body;
         const userDaitle = await User.findOne({
             _id: fUserId
         })
@@ -167,18 +165,16 @@ const updateUserProfile = async (req, res, next) => {
                         userDaitles
                     })
             } else if (userId) {
-                if (!name || !phone) {
-                    throw new CustomError("Please fill in all fields", 400)
-                } else {
-                    userDaitle.name = name;
-                    userDaitle.phone = phone;
-                    await userDaitle.save();
-                    res.status(200).
-                        json({
-                            status: true,
-                            message: "Profile Updated Successfully",
-                        })
-                }
+                const userDaitles = await User.findOneAndUpdate({
+                    _id: fUserId
+                }, req.body, { new: true, fields: { password: 0 } })
+                res.status(200).
+                    json({
+                        status: true,
+                        message: "Profile Updated Successfully",
+                        userDaitles
+                    })
+
             }
         } else {
             throw new CustomError("User not found", 404)
@@ -354,13 +350,13 @@ const insertUserData = async (req, res, next) => {
                     throw new CustomError("Please fill all the requried fields", 400);
                 } else {
                     const lastUser = await User.findOne({}, {}, { sort: { user_id: -1 } });
-                    
+
                     const newUserId = lastUser ? Number(lastUser.user_id) + 1 : 1;
                     console.log(newUserId);
-                    
+
                     const formattedUserId = newUserId < 10000 ? String(newUserId).padStart(4, '0') : String(newUserId);
                     console.log(formattedUserId);
-                    
+
                     userDaitle.businessName = businessName;
                     userDaitle.state = state;
                     userDaitle.city = city;

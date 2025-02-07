@@ -126,7 +126,7 @@ const getAllOrder = async (req, res, next) => {
 
 const getUserOrderDaitle = async (req, res, next) => {
     try {
-        const userId = req.user.id;
+        const userId = req.user.userId;
         const { orderId } = req.body
         if (!userId) {
             throw new CustomError("You are not login", 400)
